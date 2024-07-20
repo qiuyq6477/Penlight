@@ -421,7 +421,9 @@ function utils.enum(...)
   return enum
 end
 
-
+---在许多需要动态处理函数参数的场景中非常有用。
+---它能够灵活地接受各种形式的函数参数，并确保这些参数是可调用的。
+---如果参数是字符串、表或用户数据，函数会尝试将其转换为可调用对象，这在构建复杂的动态系统时非常有用
 --- process a function argument.
 -- This is used throughout Penlight and defines what is meant by a function:
 -- Something that is callable, or an operator string as defined by <code>pl.operator</code>,

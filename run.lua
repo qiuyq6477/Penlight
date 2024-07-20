@@ -37,6 +37,19 @@ local quote = dir_sep == "/" and "'" or '"'
 local pl_src = "lua/?.lua;lua/?/init.lua"
 lua = lua .. " -e " .. quote .. "package.path=[[" .. pl_src .. ";]]..package.path" .. quote
 
+
+local function run_file(file)
+  local cmd = lua .. " " .. file
+  print("Running " .. file)
+  local code1, _, code2 = os.execute(cmd)
+  local code = type(code1) == "number" and code1 or code2
+
+  if code ~= 0 then
+      print(("Running %s failed with code %d"):format(file, code))
+      os.exit(1)
+  end
+end
+
 local function run_directory(dir)
     local files = {}
     for path in lfs.dir(dir) do
@@ -48,21 +61,18 @@ local function run_directory(dir)
     table.sort(files)
 
     for _, file in ipairs(files) do
-        local cmd = lua .. " " .. file
-        print("Running " .. file)
-        local code1, _, code2 = os.execute(cmd)
-        local code = type(code1) == "number" and code1 or code2
-
-        if code ~= 0 then
-            print(("Running %s failed with code %d"):format(file, code))
-            os.exit(1)
-        end
+        run_file(file)
     end
 end
 
 for _, dir in ipairs(directories) do
     print("Running files in " .. dir)
-    run_directory(dir)
+    local attr = lfs.attributes (dir)
+    if attr.mode == "file" then
+      run_file(dir)
+    elseif attr.mode == "directory" then
+      run_directory(dir)
+    end
 end
 
 print("Run completed successfully")

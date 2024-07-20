@@ -1,0 +1,9 @@
+#if DEBUG then
+    function log(fmt, ...) print(string.format(fmt, unpack(arg))) end
+#else
+    function log() end
+#end
+
+#for i = 0, 10 do
+var$(i) = $(math.sin(math.pi * i / 10))
+#end

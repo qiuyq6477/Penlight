@@ -38,7 +38,8 @@ local function match_string(s, pos)
   if c == '"' or c == "'" then
     pos = pos + 1
     while 1 do
-      pos = assert(s:find("[" .. c .. "\\]", pos), 'syntax error')
+      local p = "[" .. c .. "\\]"
+      pos = assert(s:find(p, pos), 'syntax error')
       if s:sub(pos,pos) == c then
         local part = s:sub(posa, pos)
         return part, pos + 1
